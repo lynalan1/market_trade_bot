@@ -36,8 +36,7 @@ data/
 htmlcov/
 
 
-заметки/
-notes/
+notes
 todo/
 
 *.tmp
