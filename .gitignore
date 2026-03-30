@@ -36,9 +36,8 @@ data/
 htmlcov/
 
 
-<<<<<<< HEAD
 notes
-=======
+
 notes.txt
 >>>>>>> ebbbca4 (feat(db): implement database layer with async session and repositories)
 todo/
@@ -47,9 +46,6 @@ todo/
 *.log
 
 settings.py
-<<<<<<< HEAD
-test.py
-=======
-test.py
+
 c.py
 >>>>>>> ebbbca4 (feat(db): implement database layer with async session and repositories)
