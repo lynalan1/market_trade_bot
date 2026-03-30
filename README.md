@@ -3,6 +3,7 @@
 Automated trading bot for [market.csgo.com](https://market.csgo.com).  
 Monitors active listings, reprices items to top-1, and notifies you via Telegram when a sale requires confirmation.
 
+tg_bot : @market_csgo_1bot
 ---
 
 ## Features
