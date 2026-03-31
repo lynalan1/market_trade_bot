@@ -82,8 +82,64 @@ TRADES_INTERVAL=30
 ```
 
 ### 3. Create database schema
+
+Connect to PostgreSQL and create the database:
 ```bash
-psql -U user -d csgo_bot -f schema.sql
+psql -U postgres
+```
+```sql
+CREATE USER csgo_bot_user WITH PASSWORD 'your_password';
+CREATE DATABASE csgo_bot OWNER csgo_bot_user;
+\q
+```
+
+Then apply the schema:
+```bash
+psql -U csgo_bot_user -d csgo_bot -f schema.sql
+```
+
+Or manually — connect and run:
+```sql
+-- accounts
+CREATE TABLE accounts (
+    id                SERIAL PRIMARY KEY,
+    api_key           VARCHAR(64)  NOT NULL UNIQUE,
+    owner_telegram_id BIGINT       NOT NULL,
+    label             VARCHAR(128),
+    is_active         BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_at        TIMESTAMP    NOT NULL DEFAULT NOW()
+);
+
+-- price history
+CREATE TABLE price_history (
+    id               SERIAL PRIMARY KEY,
+    account_id       INTEGER      NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+    market_hash_name VARCHAR(255) NOT NULL,
+    old_price        INTEGER      NOT NULL,
+    new_price        INTEGER      NOT NULL,
+    updated_at       TIMESTAMP    NOT NULL DEFAULT NOW()
+);
+
+-- per-item settings
+CREATE TABLE item_settings (
+    id               SERIAL PRIMARY KEY,
+    account_id       INTEGER      NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+    market_hash_name VARCHAR(255) NOT NULL,
+    is_active        BOOLEAN      NOT NULL DEFAULT TRUE,
+    min_price        INTEGER,
+    UNIQUE (account_id, market_hash_name)
+);
+```
+
+Verify:
+```sql
+\dt
+
+ Schema |     Name      | Type  |    Owner
+--------+---------------+-------+--------------
+ public | accounts      | table | csgo_bot_user
+ public | item_settings | table | csgo_bot_user
+ public | price_history | table | csgo_bot_user
 ```
 
 ### 4. Run
